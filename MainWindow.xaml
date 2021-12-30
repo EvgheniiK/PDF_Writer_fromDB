@@ -14,8 +14,8 @@
             </DataGrid.Resources>
         </DataGrid>
         <!--<DataGrid Name="dataGrid1" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="22,24,10,157"/>-->
-        <Button Content="Open DB" HorizontalAlignment="Left" Margin="59,362,0,0" VerticalAlignment="Top" Width="92" Click="Button_Click_1"/>
-        <Button Content="Save to PDF" HorizontalAlignment="Left" Margin="268,362,0,0" VerticalAlignment="Top" Width="94" Click="Button_Click"/>
+        <Button Content="Open DB" HorizontalAlignment="Left" Margin="59,362,0,0" VerticalAlignment="Top" Width="92" Click="Open_DB"/>
+        <Button Content="Save to PDF" HorizontalAlignment="Left" Margin="268,362,0,0" VerticalAlignment="Top" Width="94" Click="Save_To_PDF"/>
 
     </Grid>
 </Window>

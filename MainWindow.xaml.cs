@@ -2,7 +2,6 @@
 using iTextSharp.text.pdf;
 using Microsoft.Data.SqlClient;
 using System;
-using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows;
@@ -17,47 +16,35 @@ namespace WpfApp_PDF
 
 
 
-        /*        //Определяем объект DataSet
-                DataSet MyDataSet = new DataSet();
-
-                //Имя каталога открываемого файла БД
-                string catName = "";
-                //Непосредственное имя самого файла БД
-                string fileName = "";*/
-
-        //Определяем объект DataSet
-        //  DataSet MyDataSet = new DataSet();
-
-
-
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        #region
+        /*
+                List<Phone> phonesList;
 
-        List<Phone> phonesList;
 
 
+                private void Button_Click_1222(object sender, RoutedEventArgs e)
+                {
 
-        private void Button_Click_1222(object sender, RoutedEventArgs e)
+                    phonesList = new List<Phone>
         {
-
-            phonesList = new List<Phone>
-{
-    new Phone { Title="iPhone 6S", Company="Apple", Price=54990 },
-    new Phone {Title="Lumia 950", Company="Microsoft", Price=39990 },
-    new Phone {Title="Nexus 5X", Company="Google", Price=29990 }
-};
-            phonesGrid.ItemsSource = phonesList;
+            new Phone { Title="iPhone 6S", Company="Apple", Price=54990 },
+            new Phone {Title="Lumia 950", Company="Microsoft", Price=39990 },
+            new Phone {Title="Nexus 5X", Company="Google", Price=29990 }
+        };
+                    phonesGrid.ItemsSource = phonesList;
 
 
 
-        }
+                }*/
 
+        #endregion
 
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Save_To_PDF(object sender, RoutedEventArgs e)
         {
 
             //Объект документа пдф
@@ -169,10 +156,10 @@ namespace WpfApp_PDF
                 }*/
 
 
-        DataSet MyDataSet = new DataSet("BookStore");
+        DataSet MyDataSet = new DataSet();
         DataTable booksTable = new DataTable("Books");
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void Open_DB(object sender, RoutedEventArgs e)
         {
 
             string connectionString = "Server = (localdb)\\mssqllocaldb; Database = ProductsDatabase; Trusted_Connection = True;";
@@ -185,7 +172,19 @@ namespace WpfApp_PDF
                 adapter.Fill(MyDataSet);
             }
 
+            var empList = MyDataSet.Tables[0].AsEnumerable().Select(dataRow => new Product()
+            {
+                Name = dataRow.Field<string>("Name")
+                ,
+                Id = dataRow.Field<int>("Id")
+                ,
+                Price = dataRow.Field<double>("Price")
+                ,
+                Count = dataRow.Field<int>("Count")
 
+            });
+
+            phonesGrid.ItemsSource = empList;// MyDataSet;
 
         }
 
@@ -243,3 +242,32 @@ namespace WpfApp_PDF
 
     }
 }
+
+
+
+
+
+
+/* метод для пдф
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+public static void WriteToPDF(string filePath, string fileResult, string text)
+{
+    string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+    var baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
+    var font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);
+    PdfReader reader = new PdfReader(filePath);
+    reader.SelectPages("1-3");
+
+    PdfStamper stamper = new PdfStamper(reader, new FileStream(fileResult, FileMode.Create));
+    for (int i = 1; i <= reader.NumberOfPages; i++)
+    {
+        PdfContentByte pbover = stamper.GetOverContent(i);
+
+
+
+        ColumnText.ShowTextAligned(pbover, Element.ALIGN_LEFT, new Phrase("Мой текст #1:" + text, font), 400, 5, 0);
+    }
+    stamper.Close();
+
+}*/
