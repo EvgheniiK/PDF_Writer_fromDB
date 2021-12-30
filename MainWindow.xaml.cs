@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows;
+using Microsoft.Data.SqlClient;
 
 namespace WpfApp_PDF
 {
@@ -171,8 +172,60 @@ namespace WpfApp_PDF
         DataSet MyDataSet = new DataSet("BookStore");
         DataTable booksTable = new DataTable("Books");
 
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+
+            /*
+                        string sql = "SELECT * FROM Products";
+                        string connectionString = "Server=(localdb)\\mssqllocaldb;Database=ProductsDatabase;Trusted_Connection=True;";// @"Data Source=.\SQLEXPRESS;Initial Catalog=usersdb;Integrated Security=True";
+                                                  // "Server=(localdb)\mssqllocaldb;Database=ProductsDatabase;Trusted_Connection=True;"
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            connection.Open();
+                            SqlDataAdapter adapter = new SqlDataAdapter(sql, connection);
+
+                            DataSet MyDataSet = new DataSet();
+                            adapter.Fill(MyDataSet);
+                            // перебор всех таблиц
+                            foreach (DataTable dt in MyDataSet.Tables)
+                            {
+                                Console.WriteLine(dt.TableName); // название таблицы
+                                                                 // перебор всех столбцов
+                                foreach (DataColumn column in dt.Columns)
+                                    Console.Write("\t{0}", column.ColumnName);
+                                Console.WriteLine();
+                                // перебор всех строк таблицы
+                                foreach (DataRow row in dt.Rows)
+                                {
+                                    // получаем все ячейки строки
+                                    var cells = row.ItemArray;
+                                    foreach (object cell in cells)
+                                        Console.Write("\t{0}", cell);
+                                    Console.WriteLine();
+                                }
+                            }
+                        }*/
+
+
+            string connectionString = "Server = (localdb)\\mssqllocaldb; Database = ProductsDatabase; Trusted_Connection = True;";
+            string sql = "SELECT * FROM Products";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                // Создаем объект DataAdapter
+                SqlDataAdapter adapter = new SqlDataAdapter(sql, connection);
+                // Создаем объект DataSet
+              //  DataSet ds = new DataSet();
+                // Заполняем Dataset
+                adapter.Fill(MyDataSet);
+            }
+
+
+
+
+
+        }
+
+            private void Button_Click_1333(object sender, RoutedEventArgs e)
         {
 
 
@@ -202,7 +255,7 @@ namespace WpfApp_PDF
             booksTable.PrimaryKey = new DataColumn[] { booksTable.Columns["Id"] };
 
             DataRow row = booksTable.NewRow();
-            row.ItemArray = new object[] { null, "Война и мир", 200 };
+            row.ItemArray = new object[] { null, "privettt", 200 };
             booksTable.Rows.Add(row); // добавляем первую строку
             booksTable.Rows.Add(new object[] { null, "Отцы и дети", 170 }); // добавляем вторую строку
 
