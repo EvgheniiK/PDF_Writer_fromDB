@@ -175,6 +175,7 @@ namespace WpfApp_PDF
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
+
            
             // добавляем таблицу в dataset
             MyDataSet.Tables.Add(booksTable);
