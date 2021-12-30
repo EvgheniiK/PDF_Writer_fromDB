@@ -157,7 +157,7 @@ namespace WpfApp_PDF
 
 
         DataSet MyDataSet = new DataSet();
-        DataTable booksTable = new DataTable("Books");
+      
 
         private void Open_DB(object sender, RoutedEventArgs e)
         {
@@ -169,7 +169,11 @@ namespace WpfApp_PDF
                 // Создаем объект DataAdapter
                 SqlDataAdapter adapter = new SqlDataAdapter(sql, connection);
                 // Заполняем Dataset
-                adapter.Fill(MyDataSet);
+                if (MyDataSet.Tables.Count == 0)
+                {
+  adapter.Fill(MyDataSet);
+                }
+              
             }
 
             var empList = MyDataSet.Tables[0].AsEnumerable().Select(dataRow => new Product()
