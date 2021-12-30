@@ -1,11 +1,11 @@
 ﻿using iTextSharp.text;
 using iTextSharp.text.pdf;
+using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Windows;
-using Microsoft.Data.SqlClient;
 
 namespace WpfApp_PDF
 {
@@ -15,7 +15,7 @@ namespace WpfApp_PDF
     public partial class MainWindow : Window
     {
 
-  
+
 
         /*        //Определяем объект DataSet
                 DataSet MyDataSet = new DataSet();
@@ -26,7 +26,7 @@ namespace WpfApp_PDF
                 string fileName = "";*/
 
         //Определяем объект DataSet
-      //  DataSet MyDataSet = new DataSet();
+        //  DataSet MyDataSet = new DataSet();
 
 
 
@@ -42,7 +42,7 @@ namespace WpfApp_PDF
 
         private void Button_Click_1222(object sender, RoutedEventArgs e)
         {
-        
+
             phonesList = new List<Phone>
 {
     new Phone { Title="iPhone 6S", Company="Apple", Price=54990 },
@@ -51,7 +51,7 @@ namespace WpfApp_PDF
 };
             phonesGrid.ItemsSource = phonesList;
 
-        
+
 
         }
 
@@ -59,7 +59,7 @@ namespace WpfApp_PDF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            
+
             //Объект документа пдф
             iTextSharp.text.Document doc = new iTextSharp.text.Document();
 
@@ -68,12 +68,12 @@ namespace WpfApp_PDF
 
             //Открываем документ
             doc.Open();
-
-            //Определение шрифта необходимо для сохранения кириллического текста
-            //Иначе мы не увидим кириллический текст
-            //Если мы работаем только с англоязычными текстами, то шрифт можно не указывать
-            BaseFont baseFont = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1252, false);//"C:\\Windows\\Fonts\\Arial", BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED
+            //установка руского языка
+            string ttf = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "ARIAL.TTF");
+            BaseFont baseFont = BaseFont.CreateFont(ttf, BaseFont.IDENTITY_H, BaseFont.NOT_EMBEDDED);
             iTextSharp.text.Font font = new iTextSharp.text.Font(baseFont, iTextSharp.text.Font.DEFAULTSIZE, iTextSharp.text.Font.NORMAL);
+
+
 
             //Обход по всем таблицам датасета (хотя в данном случае мы можем опустить
             //Так как в нашей бд только одна таблица)
@@ -109,11 +109,11 @@ namespace WpfApp_PDF
                     }
                 }
                 //Добавляем таблицу в документ
-                     
+
                 doc.Add(table);
             }
             //Закрываем документ
-      doc.Close();
+            doc.Close();
 
             MessageBox.Show("Pdf-документ сохранен");
 
@@ -175,57 +175,21 @@ namespace WpfApp_PDF
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 
-            /*
-                        string sql = "SELECT * FROM Products";
-                        string connectionString = "Server=(localdb)\\mssqllocaldb;Database=ProductsDatabase;Trusted_Connection=True;";// @"Data Source=.\SQLEXPRESS;Initial Catalog=usersdb;Integrated Security=True";
-                                                  // "Server=(localdb)\mssqllocaldb;Database=ProductsDatabase;Trusted_Connection=True;"
-                        using (SqlConnection connection = new SqlConnection(connectionString))
-                        {
-                            connection.Open();
-                            SqlDataAdapter adapter = new SqlDataAdapter(sql, connection);
-
-                            DataSet MyDataSet = new DataSet();
-                            adapter.Fill(MyDataSet);
-                            // перебор всех таблиц
-                            foreach (DataTable dt in MyDataSet.Tables)
-                            {
-                                Console.WriteLine(dt.TableName); // название таблицы
-                                                                 // перебор всех столбцов
-                                foreach (DataColumn column in dt.Columns)
-                                    Console.Write("\t{0}", column.ColumnName);
-                                Console.WriteLine();
-                                // перебор всех строк таблицы
-                                foreach (DataRow row in dt.Rows)
-                                {
-                                    // получаем все ячейки строки
-                                    var cells = row.ItemArray;
-                                    foreach (object cell in cells)
-                                        Console.Write("\t{0}", cell);
-                                    Console.WriteLine();
-                                }
-                            }
-                        }*/
-
-
             string connectionString = "Server = (localdb)\\mssqllocaldb; Database = ProductsDatabase; Trusted_Connection = True;";
             string sql = "SELECT * FROM Products";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 // Создаем объект DataAdapter
                 SqlDataAdapter adapter = new SqlDataAdapter(sql, connection);
-                // Создаем объект DataSet
-              //  DataSet ds = new DataSet();
                 // Заполняем Dataset
                 adapter.Fill(MyDataSet);
             }
 
 
 
-
-
         }
 
-            private void Button_Click_1333(object sender, RoutedEventArgs e)
+        /*    private void Button_Click_1333(object sender, RoutedEventArgs e)
         {
 
 
@@ -270,12 +234,12 @@ namespace WpfApp_PDF
             Console.Read();
 
 
-        }
+        }*/
 
 
 
 
 
 
-        }
+    }
 }
