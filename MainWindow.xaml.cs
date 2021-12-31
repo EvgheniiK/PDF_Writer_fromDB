@@ -70,7 +70,7 @@ namespace WpfApp_PDF
                 PdfPTable table = new PdfPTable(MyDataSet.Tables[i].Columns.Count);
 
                 //Добавим в таблицу общий заголовок
-                PdfPCell cell = new PdfPCell(new Phrase("БД " + "fileName" + ", таблица №" + (i + 1), font));
+                PdfPCell cell = new PdfPCell(new Phrase("DB " + "fileName" + ",  Table №" + (i + 1), font));
 
                 cell.Colspan = MyDataSet.Tables[i].Columns.Count;
                 cell.HorizontalAlignment = 1;
@@ -84,6 +84,7 @@ namespace WpfApp_PDF
                     cell = new PdfPCell(new Phrase(new Phrase(MyDataSet.Tables[i].Columns[j].ColumnName, font)));
                     //Фоновый цвет (необязательно, просто сделаем по красивее)
                     cell.BackgroundColor = iTextSharp.text.BaseColor.LIGHT_GRAY;
+                    cell.Border = 0;
                     table.AddCell(cell);
                 }
 
@@ -92,7 +93,12 @@ namespace WpfApp_PDF
                 {
                     for (int k = 0; k < MyDataSet.Tables[i].Columns.Count; k++)
                     {
-                        table.AddCell(new Phrase(MyDataSet.Tables[i].Rows[j][k].ToString(), font));
+
+                        cell = new PdfPCell(new Phrase(new Phrase(MyDataSet.Tables[i].Rows[j][k].ToString(), font)));//в ячейках 
+                        cell.Border = 0;
+                        table.AddCell(cell);
+                        // table.AddCell(new Phrase(MyDataSet.Tables[i].Rows[j][k].ToString(), font));//без ячеек
+
                     }
                 }
                 //Добавляем таблицу в документ
@@ -157,13 +163,16 @@ namespace WpfApp_PDF
 
 
         DataSet MyDataSet = new DataSet();
-      
+
 
         private void Open_DB(object sender, RoutedEventArgs e)
         {
+            string connectionString = "Server = (localdb)\\mssqllocaldb; Database = AdventureWorks2012; Trusted_Connection = True;";
+            string sql = "SELECT  [CardType],[CardNumber],[ExpYear]  FROM[Sales].[CreditCard] WHERE ExpYear > 2007";
 
-            string connectionString = "Server = (localdb)\\mssqllocaldb; Database = ProductsDatabase; Trusted_Connection = True;";
-            string sql = "SELECT * FROM Products";
+
+            /*  string connectionString = "Server = (localdb)\\mssqllocaldb; Database = ProductsDatabase; Trusted_Connection = True;";
+              string sql = "SELECT * FROM Products";*/
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 // Создаем объект DataAdapter
@@ -171,22 +180,37 @@ namespace WpfApp_PDF
                 // Заполняем Dataset
                 if (MyDataSet.Tables.Count == 0)
                 {
-  adapter.Fill(MyDataSet);
+                    adapter.Fill(MyDataSet);
                 }
-              
+
             }
 
-            var empList = MyDataSet.Tables[0].AsEnumerable().Select(dataRow => new Product()
+            /*     var empList = MyDataSet.Tables[0].AsEnumerable().Select(dataRow => new Product()
+                 {
+                     Name = dataRow.Field<string>("Name")
+                     ,
+                     Id = dataRow.Field<int>("Id")
+                     ,
+                     Price = dataRow.Field<double>("Price")
+                     ,
+                     Count = dataRow.Field<int>("Count")
+
+                 });*/
+
+            var empList = MyDataSet.Tables[0].AsEnumerable().Select(dataRow => new Card()
             {
-                Name = dataRow.Field<string>("Name")
-                ,
-                Id = dataRow.Field<int>("Id")
-                ,
-                Price = dataRow.Field<double>("Price")
-                ,
-                Count = dataRow.Field<int>("Count")
+                CardType = dataRow.Field<string>("CardType")
+                       ,
+                CardNumber = dataRow.Field<string>("CardNumber")
+                               ,
+                ExpYear = dataRow.Field<Int16>("ExpYear")
+
+
 
             });
+
+
+
 
             phonesGrid.ItemsSource = empList;// MyDataSet;
 
